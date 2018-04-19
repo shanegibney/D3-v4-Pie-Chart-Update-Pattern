@@ -1,0 +1,51 @@
+[{
+    "name": "AT",
+    "category": "M50",
+    "value": 1
+  },
+  {
+    "name": "KB",
+    "category": "M60",
+    "value": 2
+  },
+  {
+    "name": "CD",
+    "category": "M60",
+    "value": 3
+  },
+  {
+    "name": "DD",
+    "category": "M40",
+    "value": 4
+  },
+  {
+    "name": "ED",
+    "category": "M40",
+    "value": 5
+  },
+  {
+    "name": "FC",
+    "category": "M60",
+    "value": 6
+  },
+  {
+    "name": "PG",
+    "category": "M40",
+    "value": 7
+  },
+  {
+    "name": "HR",
+    "category": "M60",
+    "value": 8
+  },
+  {
+    "name": "IM",
+    "category": "M50",
+    "value": 9
+  },
+  {
+    "name": "SJ",
+    "category": "M60",
+    "value": 1
+  }
+]
