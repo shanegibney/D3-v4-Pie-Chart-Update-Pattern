@@ -39,6 +39,18 @@
         vertical-align: top;
       }
 
+      .exit {
+        fill: red;
+      }
+
+      .update {
+        fill: orange;
+      }
+
+      .enter {
+        fill: green;
+      }
+
       #json {
         max-height: 600px;
         width: 250px;
@@ -90,23 +102,24 @@
             return leaves.length;
           })
           .entries(data);
+        // console.log(category_count);
 
-        // console.log("category_count");
-        // category_count.forEach(function(element) {
-        //   console.log(element)
-        // });
-
-        var category_arcs = d3.pie()
+        var pie = d3.pie()
           .padAngle(.02)
+          .sort(null)
           .value(function(d) {
             return d.value;
           })
           (category_count);
 
-        // console.log("category_arcs");
-        // category_arcs.forEach(function(element) {
-        //   console.log(element);
-        // })
+        function arcTween(a) {
+          console.log(this._current);
+          var i = d3.interpolate(this._current, a);
+          this._current = i(0);
+          return function(t) {
+            return arc(i(t));
+          };
+        }
 
         var arc = d3.arc()
           .outerRadius(radius - 10)
@@ -123,18 +136,53 @@
           .append("g")
           .attr("transform", "translate(" + (margin.left + radius) + "," + (margin.top + radius) + ")"); //center of pie
 
-        var g = svgPie.selectAll("arc")
-          .data(category_arcs)
-          .enter().append("g")
-          .attr("class", "arc");
+        var arcs = svgPie.selectAll("arc")
+          .data(pie(category_count),
+            function(d) {
+              return d.data.key
+            });
 
-        g.append("path")
-          .attr("d", arc)
+        arcs
+          .transition()
+          .duration(4000)
+          .attrTween("d", arcTween);
+
+        // EXIT old elements not present in new data
+        arcs.enter()
+          .append("path")
+          .attr("class", "arc exit")
           .style("fill", function(d, i) {
             return color[i];
+          })
+          .attr("d", arc)
+          .each(function(d) {
+            this._current = d;
           });
 
-        g.append("text")
+        // UPDATE old elements present in new data
+        // g.enter().append("g")
+        //   .attr("class", "arc")
+        //   .append("path")
+        //   .attr("d", arc)
+        //   .style("fill", function(d, i) {
+        //     return color[i];
+        //   });
+
+        // ENTER new elements present in new data
+        // arcs.enter()
+        //   // .append("g")
+        //   // .attr("class", "arc")
+        //   .attr("class", "arc")
+        //   .attr("fill", function(d, i) {
+        //     return color(i);
+        //   })
+        //   .append("path")
+        //   .attr("d", arc)
+        //   .style("fill", function(d, i) {
+        //     return color[i];
+        //   });
+
+        arcs.enter().append("text")
           .attr("transform", function(d) {
             return "translate(" + labelArc.centroid(d) + ")";
           })
@@ -151,6 +199,8 @@
           .style("text-anchor", "middle")
           .style("fill", "black");
       };
+
+
       // ****************** - END PIE Chart - ****************
     </script>
   </body>
